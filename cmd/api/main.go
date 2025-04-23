@@ -1,10 +1,15 @@
 package main
 
-import "log"
+import (
+	"log"
+
+	"github.com/ErickLeal/gopher/internal/env"
+)
 
 func main() {
+	env.LoadEnvs()
 	cfg := config{
-		addr: ":8080",
+		addr: env.SERVER_ADDR,
 	}
 	app := application{
 		config: cfg,
