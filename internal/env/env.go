@@ -4,14 +4,19 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/joho/godotenv"
 )
 
 var (
-	ROOT_DIR    string = getProjectRoot()
-	ENVIRONMENT string
-	SERVER_ADDR string
+	ROOT_DIR       string = getProjectRoot()
+	ENVIRONMENT    string
+	SERVER_ADDR    string
+	DB_ADDR        string
+	MAX_IDLE_CONNS int
+	MAX_OPEN_CONNS int
+	MAX_IDLE_TIME  string
 )
 
 func LoadEnvs() {
@@ -25,6 +30,10 @@ func LoadEnvs() {
 
 	ENVIRONMENT = getString("ENVIRONMENT", "local")
 	SERVER_ADDR = getString("SERVER_ADDR", ":8001")
+	DB_ADDR = getString("DB_ADDR", "postgres://admin:adminpassword@localhost:5432/gophersocial?sslmode=disable")
+	MAX_IDLE_CONNS = GetInt("MAX_IDLE_CONNS", 5)
+	MAX_OPEN_CONNS = GetInt("MAX_OPEN_CONNS", 10)
+	MAX_IDLE_TIME = getString("MAX_IDLE_TIME", "5m")
 }
 
 func getString(key, fallback string) string {
@@ -34,6 +43,19 @@ func getString(key, fallback string) string {
 	}
 
 	return val
+}
+func GetInt(key string, fallback int) int {
+	val, ok := os.LookupEnv(key)
+	if !ok {
+		return fallback
+	}
+
+	valAsInt, err := strconv.Atoi(val)
+	if err != nil {
+		return fallback
+	}
+
+	return valAsInt
 }
 
 func getProjectRoot() string {
