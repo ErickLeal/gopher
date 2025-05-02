@@ -3,11 +3,17 @@ package store
 import (
 	"context"
 	"database/sql"
+	"errors"
+)
+
+var (
+	ErrResourceNotFound = errors.New("resource not found")
 )
 
 type Storage struct {
 	Posts interface {
 		Create(context.Context, *PostModel) error
+		GetById(context.Context, int64) (*PostModel, error)
 	}
 	Users interface {
 		Create(context.Context, *UserModel) error
