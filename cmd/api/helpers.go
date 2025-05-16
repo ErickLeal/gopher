@@ -4,7 +4,15 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+
+	"github.com/go-playground/validator/v10"
 )
+
+var Validate *validator.Validate
+
+func init() {
+	Validate = validator.New(validator.WithRequiredStructEnabled())
+}
 
 func writeJson(w http.ResponseWriter, status int, data any) error {
 
