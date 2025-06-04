@@ -56,3 +56,11 @@ func (app *application) writeBadRequestResponse(w http.ResponseWriter, r *http.R
 
 	writeJsonError(w, http.StatusBadRequest, err.Error())
 }
+
+func (app *application) writeDataRespose(w http.ResponseWriter, status int, data any) error {
+	type envelope struct {
+		Data any `json:"data"`
+	}
+
+	return writeJson(w, status, &envelope{Data: data})
+}

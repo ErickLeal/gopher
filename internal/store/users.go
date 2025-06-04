@@ -22,7 +22,10 @@ func (s *UserStore) Create(ctx context.Context, user *UserModel) error {
 	query := `
 	INSERT INTO users (username, email, password)
 	VALUES ($1, $2, $3) RETURNING id, created_at, updated_at
-`
+	`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
 
 	err := s.db.QueryRowContext(
 		ctx,
