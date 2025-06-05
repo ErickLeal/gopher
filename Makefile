@@ -12,3 +12,6 @@ migrate-up:
 
 migrate-down:
 	@goose -dir $(MIGRATIONS_PATH) postgres "$(DB_URI)" down
+
+seed: 
+	@go run cmd/migrate/seed/main.go
