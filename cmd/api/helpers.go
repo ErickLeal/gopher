@@ -57,6 +57,15 @@ func (app *application) writeBadRequestResponse(w http.ResponseWriter, r *http.R
 	writeJsonError(w, http.StatusBadRequest, err.Error())
 }
 
+func (app *application) writeConlfictResponse(w http.ResponseWriter, r *http.Request, err error) {
+	log.Printf(
+		"conflict request error: %s - path: %s - error: %s ",
+		r.Method, r.URL.Path, err.Error(),
+	)
+
+	writeJsonError(w, http.StatusConflict, err.Error())
+}
+
 func (app *application) writeDataRespose(w http.ResponseWriter, status int, data any) error {
 	type envelope struct {
 		Data any `json:"data"`
