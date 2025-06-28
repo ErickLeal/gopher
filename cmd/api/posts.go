@@ -25,10 +25,28 @@ type UpdatePostRequest struct {
 }
 
 func (app *application) getUserFeedHandler(w http.ResponseWriter, r *http.Request) {
+	fq := store.PaginatedFeedQuery{
+		Limit:  20,
+		Offset: 0,
+		Sort:   "desc",
+		Tags:   []string{},
+		Search: "",
+	}
+
+	fq, err := fq.Parse(r)
+	if err != nil {
+		app.writeBadRequestResponse(w, r, err)
+		return
+	}
+
+	if err := Validate.Struct(fq); err != nil {
+		app.writeBadRequestResponse(w, r, err)
+		return
+	}
 
 	ctx := r.Context()
 
-	feed, err := app.store.Posts.GetUserFeed(ctx, 43)
+	feed, err := app.store.Posts.GetUserFeed(ctx, 43, fq)
 	if err != nil {
 		app.writeInternalServerErrorResponse(w, r, err)
 		return
