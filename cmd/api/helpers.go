@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
@@ -40,28 +39,19 @@ func writeJsonError(w http.ResponseWriter, status int, message string) error {
 }
 
 func (app *application) writeInternalServerErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
-	log.Printf(
-		"internal server erro: %s - path: %s - error: %s ",
-		r.Method, r.URL.Path, err.Error(),
-	)
+	app.logger.Errorw("internal error", "method", r.Method, "path", r.URL.Path, "error", err.Error())
 
 	writeJsonError(w, http.StatusInternalServerError, "internal server error")
 }
 
 func (app *application) writeBadRequestResponse(w http.ResponseWriter, r *http.Request, err error) {
-	log.Printf(
-		"bad request error: %s - path: %s - error: %s ",
-		r.Method, r.URL.Path, err.Error(),
-	)
+	app.logger.Warnln("bad request", "method", r.Method, "path", r.URL.Path, "- error -> ", err.Error())
 
 	writeJsonError(w, http.StatusBadRequest, err.Error())
 }
 
 func (app *application) writeConlfictResponse(w http.ResponseWriter, r *http.Request, err error) {
-	log.Printf(
-		"conflict request error: %s - path: %s - error: %s ",
-		r.Method, r.URL.Path, err.Error(),
-	)
+	app.logger.Errorf("conflict response", "method", r.Method, "path", r.URL.Path, "error", err.Error())
 
 	writeJsonError(w, http.StatusConflict, err.Error())
 }
