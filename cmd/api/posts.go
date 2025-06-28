@@ -57,6 +57,20 @@ func (app *application) getUserFeedHandler(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+// CreatePost godoc
+//
+//	@Summary		Creates a post
+//	@Description	Creates a post
+//	@Tags			posts
+//	@Accept			json
+//	@Produce		json
+//	@Param			payload	body		CreatePostRequest	true	"Post payload"
+//	@Success		201		{object}	store.PostModel
+//	@Failure		400		{object}	error
+//	@Failure		401		{object}	error
+//	@Failure		500		{object}	error
+//	@Security		ApiKeyAuth
+//	@Router			/posts [post]
 func (app *application) createPostHandler(w http.ResponseWriter, r *http.Request) {
 	var postRequest CreatePostRequest
 	if err := readJson(w, r, &postRequest); err != nil {

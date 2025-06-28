@@ -14,6 +14,7 @@ var (
 	ENVIRONMENT    string
 	SERVER_ADDR    string
 	DB_ADDR        string
+	API_URL        string
 	MAX_IDLE_CONNS int
 	MAX_OPEN_CONNS int
 	MAX_IDLE_TIME  string
@@ -30,6 +31,7 @@ func LoadEnvs() {
 
 	ENVIRONMENT = getString("ENVIRONMENT", "local")
 	SERVER_ADDR = getString("SERVER_ADDR", ":8001")
+	API_URL = getString("API_URL", "localhost:8001")
 	DB_ADDR = getString("DB_ADDR", "postgres://admin:adminpassword@localhost:5432/gophersocial?sslmode=disable")
 	MAX_IDLE_CONNS = GetInt("MAX_IDLE_CONNS", 5)
 	MAX_OPEN_CONNS = GetInt("MAX_OPEN_CONNS", 10)

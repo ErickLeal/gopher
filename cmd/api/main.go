@@ -8,10 +8,26 @@ import (
 	"github.com/ErickLeal/gopher/internal/store"
 )
 
+//	@title			GopherSocial API
+//	@description	API for GopherSocial, a social network for gohpers
+//	@termsOfService	http://swagger.io/terms/
+
+//	@contact.name	API Support
+//	@contact.url	http://www.swagger.io/support
+//	@contact.email	support@swagger.io
+
+//	@license.name	Apache 2.0
+//	@license.url	http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @securityDefinitions.apikey	ApiKeyAuth
+// @in							header
+// @name						Authorization
+// @description
 func main() {
 	env.LoadEnvs()
 	cfg := config{
-		addr: env.SERVER_ADDR,
+		addr:   env.SERVER_ADDR,
+		apiUrl: env.API_URL,
 		db: dbConfig{
 			addr:         env.DB_ADDR,
 			maxOpenConns: env.MAX_OPEN_CONNS,
