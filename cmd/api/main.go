@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/ErickLeal/gopher/internal/db"
 	"github.com/ErickLeal/gopher/internal/env"
 	"github.com/ErickLeal/gopher/internal/store"
@@ -32,6 +34,9 @@ func main() {
 			maxOpenConns: env.MAX_OPEN_CONNS,
 			maxIdleConns: env.MAX_IDLE_CONNS,
 			maxIdleTime:  env.MAX_IDLE_TIME,
+		},
+		mail: mailConfig{
+			exp: time.Hour * 24 * 3, // 3 days
 		},
 	}
 

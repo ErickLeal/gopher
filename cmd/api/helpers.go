@@ -56,6 +56,12 @@ func (app *application) writeConlfictResponse(w http.ResponseWriter, r *http.Req
 	writeJsonError(w, http.StatusConflict, err.Error())
 }
 
+func (app *application) writeNotFoudResponse(w http.ResponseWriter, r *http.Request, err error) {
+	app.logger.Warnf("not found error", "method", r.Method, "path", r.URL.Path, "error", err.Error())
+
+	writeJsonError(w, http.StatusNotFound, "not found")
+}
+
 func (app *application) writeDataRespose(w http.ResponseWriter, status int, data any) error {
 	type envelope struct {
 		Data any `json:"data"`
