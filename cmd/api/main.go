@@ -5,6 +5,7 @@ import (
 
 	"github.com/ErickLeal/gopher/internal/db"
 	"github.com/ErickLeal/gopher/internal/env"
+	"github.com/ErickLeal/gopher/internal/mailer"
 	"github.com/ErickLeal/gopher/internal/store"
 	"go.uber.org/zap"
 )
@@ -54,10 +55,14 @@ func main() {
 
 	store := store.NewStorage(db)
 
+	//mailer
+	mailer := mailer.NewSendGridMailer(env.SENDGRID_API_KEY, env.FROM_EMAIL)
+
 	app := application{
 		config: cfg,
 		store:  store,
 		logger: logger,
+		mailer: mailer,
 	}
 
 	mux := app.mount()

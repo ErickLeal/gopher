@@ -10,14 +10,16 @@ import (
 )
 
 var (
-	ROOT_DIR       string = getProjectRoot()
-	ENVIRONMENT    string
-	SERVER_ADDR    string
-	DB_ADDR        string
-	API_URL        string
-	MAX_IDLE_CONNS int
-	MAX_OPEN_CONNS int
-	MAX_IDLE_TIME  string
+	ROOT_DIR         string = getProjectRoot()
+	ENVIRONMENT      string
+	SERVER_ADDR      string
+	DB_ADDR          string
+	API_URL          string
+	MAX_IDLE_CONNS   int
+	MAX_OPEN_CONNS   int
+	MAX_IDLE_TIME    string
+	SENDGRID_API_KEY string
+	FROM_EMAIL       string
 )
 
 func LoadEnvs() {
@@ -36,6 +38,8 @@ func LoadEnvs() {
 	MAX_IDLE_CONNS = GetInt("MAX_IDLE_CONNS", 5)
 	MAX_OPEN_CONNS = GetInt("MAX_OPEN_CONNS", 10)
 	MAX_IDLE_TIME = getString("MAX_IDLE_TIME", "5m")
+	SENDGRID_API_KEY = getString("SENDGRID_API_KEY", "123")
+	FROM_EMAIL = getString("FROM_EMAIL", "123")
 }
 
 func getString(key, fallback string) string {

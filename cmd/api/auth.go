@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
+	"github.com/ErickLeal/gopher/internal/env"
+	"github.com/ErickLeal/gopher/internal/mailer"
 	"github.com/ErickLeal/gopher/internal/store"
 	"github.com/google/uuid"
 )
@@ -73,6 +76,29 @@ func (app *application) registerUserHandler(w http.ResponseWriter, r *http.Reque
 	userWithToken := UserWithToken{
 		UserModel: user,
 		Token:     token,
+	}
+
+	activationURL := fmt.Sprintf("%s/confirm/%s", env.API_URL, token)
+	isProduction := env.ENVIRONMENT == "production"
+	vars := struct {
+		Username      string
+		ActivationURL string
+	}{
+		Username:      user.Username,
+		ActivationURL: activationURL,
+	}
+
+	app.logger.Infow("sending user invitation email", "email", user.Email, "activationURL", activationURL, "isProduction", isProduction)
+	err = app.mailer.Send(mailer.UserInvitationTemplate, user.Username, user.Email, vars, !isProduction)
+	if err != nil {
+		app.logger.Errorw("failed to send user invitation email", "error", err)
+
+		if err := app.store.Users.Delete(ctx, user.ID); err != nil {
+			app.logger.Errorw("failed to delete user after email send failure", "error", err)
+		}
+
+		app.writeInternalServerErrorResponse(w, r, err)
+		return
 	}
 
 	if err := app.writeDataRespose(w, http.StatusCreated, userWithToken); err != nil {
